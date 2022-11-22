@@ -1,0 +1,66 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Airline {
+  AIRLINE   String   @id
+  IATA_CODE String
+  FLIGHTS   Flight[]
+  AIRPORT   Airport  @relation(fields: [IATA_CODE], references: [IATA_CODE])
+}
+
+model Airport {
+  IATA_CODE String    @id
+  AIRPORT   String
+  CITY      String
+  STATE     String
+  COUNTRY   String
+  LATITUDE  Float
+  LONGITUDE Float
+  AIRLINES  Airline[]
+}
+
+model Flight {
+  ID                  String   @id @default(uuid())
+  YEAR                Int
+  MONTH               Int
+  DAY                 Int
+  DAY_OF_WEEK         Int
+  // TODO: Relation with Airline model
+  AIRLINE             String?
+  AIRLINE_DATA        Airline? @relation(fields: [AIRLINE], references: [AIRLINE])
+  FLIGHT_NUMBER       Int
+  TAIL_NUMBER         Int
+  ORIGIN_AIRPORT      String
+  DESTINATION_AIRPORT String
+  SCHEDULED_DEPARTURE String
+  DEPARTURE_TIME      String
+  DEPARTURE_DELAY     String
+  TAXI_OUT            String
+  WHEELS_OFF          String
+  SCHEDULED_TIME      String
+  ELAPSED_TIME        String
+  AIR_TIME            String
+  DISTANCE            String
+  WHEELS_ON           String
+  TAXI_IN             String
+  SCHEDULED_ARRIVAL   String
+  ARRIVAL_TIME        String
+  ARRIVAL_DELAY       String
+  DIVERTED            String
+  CANCELLED           String
+  CANCELLATION_REASON String
+  AIR_SYSTEM_DELAY    String
+  SECURITY_DELAY      String
+  AIRLINE_DELAY       String
+  LATE_AIRCRAFT_DELAY String
+  WEATHER_DELAY       String
+}
